@@ -1,0 +1,213 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6bea2eca-a1bf-4ba5-84fa-af5959be48ad",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JRuWF16rSrtUh6pvOuC9YHHA74jHOZ-2P2it_dSXFH0",
+          "mode": "list",
+          "cachedResultName": "Order Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JRuWF16rSrtUh6pvOuC9YHHA74jHOZ-2P2it_dSXFH0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JRuWF16rSrtUh6pvOuC9YHHA74jHOZ-2P2it_dSXFH0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        0
+      ],
+      "id": "df7b8992-72c9-46bf-af39-4d9c0a06177e",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hycHvAjRZiG25orG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "sales_data",
+          "mode": "list",
+          "cachedResultName": "sales_data"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "quantity": "={{ $json[\"quantity\"] }}",
+            "total_amount": "={{ $json[\"amount\"] }}",
+            "sales_rep": "={{ $json[\"sales_rep\"] }}",
+            "order_id": "={{ $json[\"order_id\"] }}",
+            "product_name": "={{ $json[\"product_name\"] }}",
+            "sales_date": "={{ $json[\"sales_date\"] }}",
+            "region": "={{ $json[\"region\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "order_id",
+              "displayName": "order_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sales_rep",
+              "displayName": "sales_rep",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "product_name",
+              "displayName": "product_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_amount",
+              "displayName": "total_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sales_date",
+              "displayName": "sales_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "region",
+              "displayName": "region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        336,
+        0
+      ],
+      "id": "411c5fc0-4c75-4fbc-b159-7ad18d6ea6c2",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "5197MtMEpX4TVZpN",
+          "name": "Postgres account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "34671eaa-5168-473e-be78-6399c126f840",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "991c58eb97e9126b7b3ba97f161bd29c4a17d4417104c21700f0ebecf4b1e4d1"
+  },
+  "id": "Fa8eb4YLyW2hMjRZ",
+  "tags": []
+}
